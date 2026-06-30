@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUNA Prep</title>
+
+<style>
+    :root{
+        --primary:#3a0ca3;
+        --secondary:#4361ee;
+        --accent:#f72585;
+        --light:#f5f7fa;
+        --dark:#333;
+        --white:#fff;
+        --gray:#ccc;
+    }
+    *{
+        box-sizing:border-box;margin:0;padding:0
+    }
+    body{
+        font-family:Segoe UI,Tahoma,sans-serif;background:var(--light);color:var(--dark);
+    }
+    header{
+        background:var(--primary);color:var(--white);padding:15px 30px;display:flex;justify-content:center;align-items:center;position:relative;
+    }
+    header .auth{
+        position:absolute;right:30px;
+    }
+    .btn{
+        padding:10px 18px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;
+    }
+    .hero{
+        background:linear-gradient(135deg,var(--secondary),var(--primary));color:var(--white);text-align:center;padding:80px 20px;
+    }
+    .section{
+        display:none;background:var(--white);max-width:1000px;margin:40px auto;
+        padding:30px;border-radius:12px;box-shadow:0 0 10px var(--gray);text-align:center;
+    }
+    .mode-grid,.course-grid{
+        display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;
+    }
+    .mode-card,.course-card{
+        padding:35px 20px;border-radius:12px;border:2px solid var(--primary);font-weight:bold;font-size:18px;cursor:pointer;
+    }
+    .mode-card.disabled{
+        opacity:.5;cursor:not-allowed;
+    }
+    .mode-card:hover{
+        background-color:#4361ee;
+        transition: 0.4s;
+        color: white;
+    }
+    .course-card:hover{
+        background-color:#4361ee;
+        transition: 0.4s;
+        color: white;
+    }
+    #signupBtn{
+        background-color: white;
+        border-radius: 5px;
+    }
+    #signupBtn:hover{
+        background-color: #f72585; 
+        border: 1px #f72585;
+        transition: 0.5s;
+    }
+    iframe{
+        width:100%;height:600px;border-radius:8px;border:1px solid var(--gray);
+    }
+    .nav-bar{
+        display:flex;justify-content:flex-start;margin-bottom:20px;
+    }
+    .modal{
+        display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);justify-content:center;align-items:center;
+    }
+    .modal-content{
+        background:var(--white);padding:25px;border-radius:8px;width:320px;
+    }
+    input{
+        width:100%;padding:10px;margin:8px 0;
+    }
+    .mock-question{
+        border:2px solid var(--primary);border-radius:10px;padding:20px;margin-bottom:20px;text-align:left;background:#f9f9f9;
+    }
+    .mock-question p{
+        margin-bottom:10px;font-weight:bold;
+    }
+    .mock-options label{
+        display:block;margin-bottom:6px;cursor:pointer;
+    }
+    
+    #progressContainer{
+        margin-bottom:15px;
+    }
+    #loginBtn:hover{
+       background-color: #f72585; 
+        border: 1px #f72585;
+        transition: 0.5s; 
+    }
+    #logoutBtn:hover{
+        background-color: #f72585; 
+        border: 1px #f72585;
+        transition: 0.5s; 
+    }
+    .btn-outline:hover{
+        background-color:black;
+        transition: 0.4s;
+        color: white; 
+    }
+    #loginSubmit:hover{
+        background-color: #f72585; 
+        border: 1px #f72585;
+        transition: 0.5s; 
+    }
+    #loginSubmit{
+        margin-left: 36%
+    }
+    #signupSubmit:hover{
+        background-color: #f72585; 
+        border: 1px #f72585;
+        transition: 0.5s;
+    }
+    #signupSubmit{
+        margin-left: 25%;
+    }
+</style>
+</head>
+
+<body>
+    <header>
+        <strong>VUNA Prep</strong>
+        <div class="auth">
+            <button class="btn btn-outline" id="loginBtn">Login</button>
+            <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+            <button class="btn btn-outline" id="logoutBtn" style="display: none;">Logout</button>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Your No. 1 guide to examination success</h1>
+        <p>Prepare smarter, test better, succeed faster</p>
+    </div>
+
+    <div class="section" id="modeSelection" style="display:block;">
+        <h2>Select a Mode</h2>
+        <div class="mode-grid">
+            <div class="mode-card" id="studyMode">Study Mode</div>
+            <div class="mode-card" id="mockMode">Mock Test Mode</div>
+            <div class="mode-card" id="pastQuestionsMode">Past Questions Mode</div>
+        </div>
+    </div>
+
+    <div class="section" id="pastQuestionsSection">
+        <div class="nav-bar">
+            <button class="btn btn-outline"id="backButton" onclick="goBack()">Back</button>
+        </div>
+        <h2>Select Course (Past Questions)</h2>
+        <div class="course-grid">
+            <div class="course-card" onclick="openPastIFT211()">IFT 211</div>
+            <div class="course-card" onclick="openPastCOS201()">COS 201</div>
+            <div class="course-card" onclick="openPastSEN201()">SEN 201</div>
+            <div class="course-card" onclick="openPastVUASEN201()">VUA SEN 201</div>
+            <div class="course-card" onclick="openPastSEN103()">SEN 103</div>
+            <div class="course-card" onclick="openPastSEN181()">SEN 181</div>
+        </div>
+            </div>
+                <div class="section" id="pastIFT211">
+                <div class="nav-bar">
+                    <button class="btn btn-outline" onclick="goBack()">Back</button>
+                </div>
+                <h2>IFT 211 Past Questions</h2>
+                <div class="course-grid">
+                    <div class="course-card" onclick="openPastPDF('IFT 211 – 2025','ift211pq.pdf')">2025</div>
+                </div>
+            </div>
+
+            <div class="section" id="pastCOS201">
+                <div class="nav-bar">
+                    <button class="btn btn-outline" onclick="goBack()">Back</button>
+                </div>
+                <h2>COS 201 Past Questions</h2>
+                <div class="course-grid">
+                    <div class="course-card" onclick="openPastPDF('COS 201 – 2025', 'cos201pq.pdf')">2025</div>
+                </div>
+            </div>
+
+            <div class="section" id="pastSEN201">
+                <div class="nav-bar">
+                    <button class="btn btn-outline" onclick="goBack()">Back</button>
+                </div>
+                <h2>SEN 201 Past Questions</h2>
+                <div class="course-grid">
+                    <div class="course-card" onclick="openPastPDF('SEN 201 – 2025','sen201PQ.pdf')">2025</div>
+                </div>
+            </div>
+
+            <div class="section" id="pastVUASEN201">
+                <div class="nav-bar">
+                    <button class="btn btn-outline" onclick="goBack()">Back</button>
+                </div>
+                <h2>VUA SEN 201 Past Questions</h2>
+                <div class="course-grid">
+                    <div class="course-card" onclick="openPastPDF('VUA SEN 201 – 2025','vuaSen201pq.pdf')">2025</div>
+                </div>
+            </div>
+
+            <div class="section" id="pastSEN103">
+                <div class="nav-bar">
+                    <button class="btn btn-outline" onclick="goBack()">Back</button>
+                </div>
+                <h2>SEN 103 Past Questions</h2>
+                <div class="course-grid">
+                    <div class="course-card" onclick="openPastPDF('SEN 103 – 2025','sen103pq.pdf')">2025</div>
+                </div>
+            </div>
+
+            <div class="section" id="pastSEN181">
+                <div class="nav-bar">
+                    <button class="btn btn-outline" onclick="goBack()">Back</button>
+                </div>
+                <h2>SEN 181 Past Questions</h2>
+                <div class="course-grid">
+                    <div class="course-card" onclick="openPastPDF('SEN 181 – 2025','sen181pq.pdf')">2025</div>
+                </div>
+            </div>
+
+    <div class="section" id="studyCourse">
+        <h2>Select Course to Study</h2>
+        <div class="nav-bar">
+            <button class="btn btn-outline" onclick="goBack()">Back</button> 
+        </div>
+        <div class="course-grid">
+            <div class="course-card" onclick="openIFT211()">IFT 211</div>
+            <div class="course-card" onclick="openCOS201()">COS 201</div>
+            <div class="course-card" onclick="openSEN201()">SEN 201</div>
+        </div>
+    </div>
+
+    <div class="section" id="sen201Lectures">
+        <div class="nav-bar">
+            <button class="btn btn-outline" onclick="goBack()">Back</button>
+        </div>
+        <h2>SEN 201 Lectures</h2>
+        <div class="course-grid">
+            <div class="course-card" onclick="openSENLecture('Lecture 1','SEN 201 (Introd to S-Engineering) Lecture Note by Dr Anayo.pdf')">Lecture 1</div>
+            <div class="course-card" onclick="openSENLecture('Lecture 2','SEN 201 PRACTICALS_ Requirements Gathering & Specification.pdf')">Lecture 2</div>
+        </div>
+    </div>
+
+    <div class="section" id="cos201Lectures">
+        <div class="nav-bar">
+            <button class="btn btn-outline" onclick="goBack()">Back</button>
+        </div>
+        <h2>COS 201 Lectures</h2>
+        <div class="course-grid">
+            <div class="course-card" onclick="openCOSLecture('Lecture 1','COS 201 theory note.pdf')">Lecture 1</div>
+            <div class="course-card" onclick="openCOSLecture('Lecture 2','scripting language-1.pdf')">Lecture 2</div>
+            <div class="course-card" onclick="openCOSLecture('Lecture 3','INTRODUCTION TO PROGRAMMING PARADIGMS.pdf')">Lecture 3</div>
+        </div>
+    </div>
+
+    <div class="section" id="ift211Lectures">
+        <div class="nav-bar">
+            <button class="btn btn-outline" onclick="goBack()">Back</button>
+        </div>
+        <h2> IFT211 Lectures</h2>
+        <div class="course-grid">
+            <div class="course-card" onclick="openIFTLecture('Lecture 1','IFT 211 - Introduction.pdf')">Lecture 1</div>
+            <div class="course-card" onclick="openIFTLecture('Lecture 2','Chap_02_P2 Karnaugh.pdf')">Lecture 2</div>
+            <div class="course-card" onclick="openIFTLecture('Lecture 3','31_12_2019_1111707220- LOGIC DESIGN GOOD.pdf')">Lecture 3</div>
+            <div class="course-card" onclick="openIFTLecture('Lecture 4','Lect14_Logic_Circuits_full.pdf')">Lecture 4</div>
+        </div>
+    </div>
+
+    <div class="section" id="studyViewer">
+        <div class="nav-bar">
+            <button class="btn btn-outline" onclick="goBack()">Back</button>
+        </div>
+        <h2 id="studyTitle"></h2>
+        <iframe id="pdfViewer"></iframe>
+    </div>
+
+    <div class="section" id="mockCourse">
+        <div class="nav-bar">
+            <button class="btn btn-outline" onclick="goBack()">Back</button>
+        </div>
+        <h2>Select Course for Mock Test</h2>
+        <div class="course-grid">
+            <div class="course-card" data-course="IFT211">IFT 211</div>
+            <div class="course-card" data-course="COS201">COS 201</div>
+            <div class="course-card" data-course="SEN201">SEN 201</div>
+        </div>
+    </div>
+
+    <div class="section" id="mockViewer">
+        <div class="nav-bar">
+            <button class="btn btn-outline" onclick="goBack()">Back</button>
+        </div>
+        <h2 id="mockTitle"></h2>
+        <div id="progressContainer">
+            <div style="background:#ccc;border-radius:8px;height:20px;">
+                <div id="progressBar" style="background:var(--accent);height:100%;width:0%;border-radius:8px;"></div>
+            </div>
+    </div>
+    
+    <div id="questionsContainer" style="text-align:left;"></div>
+        <div style="margin-top:10px;">
+            <button class="btn btn-outline" id="prevBtn">Previous</button>
+            <button class="btn btn-outline" id="nextBtn">Next</button>
+            <button class="btn btn-primary" id="submitMockBtn" style="display:none;">Submit Test</button>
+        </div>
+    </div>
+
+    <div class="section" id="mockAnalysis">
+        <div class="nav-bar">
+            <button class="btn btn-outline" onclick="goBack()">Back</button>
+        </div>
+        <h2 id="analysisTitle"></h2>
+        <p id="scoreSummary"></p>
+        <p id="timeTaken"></p>
+        <p id="correctAnswersList"></p>
+        <button class="btn btn-primary" onclick="navigateTo(document.getElementById('mockCourse'))">Take Another Test</button>
+    </div>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h3>Login</h3>
+            <input placeholder="Email">
+            <input type="password" placeholder="Password">
+            <button class="btn btn-primary" id="loginSubmit">Login</button>
+        </div>
+    </div>
+
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <h3>Sign Up</h3>
+            <input placeholder="Name">
+            <input placeholder="Email">
+            <input type="password" placeholder="Password">
+            <button class="btn btn-primary" id="signupSubmit">Create Account</button>
+        </div>
+    </div>
+
+
+<script>
+    let loggedIn=false;
+    const sections=document.querySelectorAll(".section");
+    let historyStack=[];
+    let currentCourse="", userAnswers=[], currentQuestionIndex=0, testStartTime=0;
+    let mockQuestions=[];
+
+    const loginBtn=document.getElementById("loginBtn");
+    const signupBtn=document.getElementById("signupBtn");
+    const logoutBtn=document.getElementById("logoutBtn");
+    const loginModal=document.getElementById("loginModal");
+    const signupModal=document.getElementById("signupModal");
+    const studyMode=document.getElementById("studyMode");
+    const mockMode=document.getElementById("mockMode");
+    const pastMode = document.getElementById("pastQuestionsMode");
+    const studyTitle=document.getElementById("studyTitle");
+    const pdfViewer=document.getElementById("pdfViewer");
+    const mockTitle=document.getElementById("mockTitle");
+    const prevBtn=document.getElementById("prevBtn");
+    const nextBtn=document.getElementById("nextBtn");
+    const submitMockBtn=document.getElementById("submitMockBtn");
+    const progressBar=document.getElementById("progressBar");
+    const questionsContainer=document.getElementById("questionsContainer");
+
+    function showSection(section){
+        sections.forEach(s=>s.style.display="none");
+        section.style.display="block";
+    }
+    function navigateTo(section){
+        const current=[...sections].find(s=>s.style.display==="block");
+        if(current) historyStack.push(current);
+        showSection(section);
+    }
+    function goBack(){
+        if(historyStack.length===0) return;
+        showSection(historyStack.pop());
+    }
+
+    loginBtn.onclick=()=>loginModal.style.display="flex";
+    signupBtn.onclick=()=>signupModal.style.display="flex";
+    loginSubmit.onclick=signupSubmit.onclick=()=>{
+        loggedIn=true;
+        loginModal.style.display=signupModal.style.display="none";
+        loginBtn.style.display=signupBtn.style.display="none";
+        logoutBtn.style.display="inline-block";
+    };
+    logoutBtn.onclick=()=>location.reload();
+
+ if(pastMode){
+    pastMode.onclick = () => {
+        if(!loggedIn){
+            alert("Please login");
+            return;
+        }
+       navigateTo(document.getElementById("pastQuestionsSection"));
+    };
+}
+
+
+function openPastIFT211(){
+    navigateTo(document.getElementById("pastIFT211"));
+}
+
+function openPastCOS201(){
+    navigateTo(document.getElementById("pastCOS201"));
+}
+
+function openPastSEN201(){
+    navigateTo(document.getElementById("pastSEN201"));
+}
+
+function openPastPDF(title, file){
+    studyTitle.textContent = title;
+    pdfViewer.src = file;
+    navigateTo(document.getElementById("studyViewer"));
+}
+
+
+studyMode.onclick=()=>{ 
+        if(!loggedIn){ alert("Please login"); return; } 
+        navigateTo(document.getElementById("studyCourse")); 
+    };
+
+    function openSEN201(){
+        navigateTo(document.getElementById("sen201Lectures"));
+    }
+    function openSENLecture(title,file){
+        studyTitle.textContent=" 201 - "+title;
+        pdfViewer.src=file;
+        navigateTo(document.getElementById("studyViewer"));
+    }
+
+    function openCOS201(){
+        navigateTo(document.getElementById("cos201Lectures"));
+    }
+    function openCOSLecture(title,file){
+        studyTitle.textContent="COS 201 - "+title;
+        pdfViewer.src=file;
+        navigateTo(document.getElementById("studyViewer"));
+    }
+
+    function openIFT211(){
+        navigateTo(document.getElementById("ift211Lectures"));
+    }
+    function openIFTLecture(title,file){
+        studyTitle.textContent="IFT 211 - "+title;
+        pdfViewer.src=file;
+        navigateTo(document.getElementById("studyViewer"));
+    }
+
+    mockMode.onclick=()=>{ 
+        if(!loggedIn){ alert("Please login"); return; } 
+        navigateTo(document.getElementById("mockCourse")); 
+    };
+
+    
+
+    document.querySelectorAll("#mockCourse .course-card").forEach(card=>{
+        card.onclick=()=>{ if(!loggedIn){ alert("Please login"); return;} startMockTest(card.dataset.course); }
+    });
+
+async function startMockTest(course){
+    currentCourse = course;
+
+    try{
+
+    const response = await fetch(`http://localhost:5000/questions/${course}/mock`);
+
+    mockQuestions = await response.json();
+
+    if(mockQuestions.length === 0){
+    alert("No questions available for this course yet.");
+    return;
+    }
+
+    userAnswers = Array(mockQuestions.length).fill(null);
+    currentQuestionIndex = 0;
+    testStartTime = Date.now();
+
+    mockTitle.textContent = course + " Mock Test";
+
+    navigateTo(document.getElementById("mockViewer"));
+
+    showQuestion();
+
+    }catch(error){
+    console.error("Error loading questions:", error);
+    alert("Failed to load questions from server.");
+    }
+}
+
+function showQuestion(){
+
+    const question = mockQuestions[currentQuestionIndex];
+
+    let html = `
+    <div class="mock-question">
+    <p>Q${currentQuestionIndex+1}: ${question.content}</p>
+    <div class="mock-options">
+    `;
+
+    ["A","B","C","D"].forEach(letter => {
+
+    const optionText = question["option_" + letter.toLowerCase()];
+    const checked = userAnswers[currentQuestionIndex] === letter ? "checked" : "";
+
+    html += `
+    <label>
+    <input type="radio" name="q${currentQuestionIndex}" value="${letter}" ${checked}>
+    ${optionText}
+    </label>
+    `;
+
+    });
+
+    html += "</div></div>";
+
+    questionsContainer.innerHTML = html;
+}
+
+document.querySelectorAll("#questionsContainer input").forEach(inp=>{
+inp.onchange=()=>{
+userAnswers[currentQuestionIndex]=inp.value;
+updateProgress();
+};
+});
+
+prevBtn.style.display=currentQuestionIndex===0?"none":"inline-block";
+nextBtn.style.display=currentQuestionIndex===mockQuestions.length-1?"none":"inline-block";
+submitMockBtn.style.display=currentQuestionIndex===mockQuestions.length-1?"inline-block":"none";
+
+updateProgress();
+
+
+
+    document.querySelectorAll("#questionsContainer input").forEach(inp=>{
+        inp.onchange=()=>{ userAnswers[currentQuestionIndex]=inp.value; updateProgress(); };
+        });
+        prevBtn.style.display=currentQuestionIndex===0?"none":"inline-block";
+        nextBtn.style.display=currentQuestionIndex===mockQuestions[currentCourse].length-1?"none":"inline-block";
+        submitMockBtn.style.display=currentQuestionIndex===mockQuestions[currentCourse].length-1?"inline-block":"none";
+        updateProgress();
+    ;
+
+    prevBtn.onclick=()=>{  
+        if(currentQuestionIndex>0) currentQuestionIndex--; showQuestion();
+    }
+    nextBtn.onclick=()=>{ 
+        if(currentQuestionIndex<mockQuestions[currentCourse].length-1) currentQuestionIndex++; showQuestion();
+    }
+
+    function updateProgress(){
+        const answered=userAnswers.filter(a=>a!==null).length;
+        const total = mockQuestions.length;
+        progressBar.style.width=(answered/total*100)+"%";
+    }
+
+    submitMockBtn.onclick=()=>{
+        const questions = mockQuestions;
+        let correct=0, wrong=0, correctList="";
+        const timeTakenMs=Date.now()-testStartTime;
+        const minutes=Math.floor(timeTakenMs/1000/60);
+        const seconds=Math.floor((timeTakenMs/1000)%60);
+        questions.forEach((q,i)=>{
+        if(userAnswers[i] === q.correct_option) correct++; else wrong++;
+        correctList+=`<p>Q${i+1}: Correct Answer: ${q.correct_option}</p>`;
+        });
+        document.getElementById("analysisTitle").textContent=currentCourse+" Test Analysis";
+        document.getElementById("scoreSummary").innerHTML=`Score: ${correct}/${questions.length} (${Math.round(correct/questions.length*100)}%)<br>Wrong: ${wrong}`;
+        document.getElementById("timeTaken").innerHTML=`Time Taken: ${minutes} min ${seconds} sec`;
+        document.getElementById("correctAnswersList").innerHTML=correctList;
+        navigateTo(document.getElementById("mockAnalysis"));
+    };
+</script>
+</body>
+</html>
